@@ -12,5 +12,6 @@
     "describeOtherProblem": "Please describe",
     "listView": "List view",
     "listViewButtonUserLocation": "To enable the list view, please allow access to your location",
-    "navigateMeButton": "Navigate me"
+    "navigateMeButton": "Navigate me",
+    "clearFilters": "clear filters"
 }

@@ -4,6 +4,7 @@ import { useCategories } from '../Categories/CategoriesContext';
 import useDebounce from '../../utils/hooks/useDebounce';
 import { httpService } from '../../services/http/httpService';
 import { useMapStore } from '../Map/store/map.store';
+import { useTranslation } from 'react-i18next';
 
 export const FiltersForm = () => {
     const { setCategories } = useCategories();
@@ -11,6 +12,7 @@ export const FiltersForm = () => {
     const [categoriesData, setCategoriesData] = useState([]);
     const mapConfiguration = useMapStore(state => state.mapConfiguration);
     const mapConfigDebounced = useDebounce(mapConfiguration, 5000);
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (mapConfigDebounced === null) {
@@ -74,6 +76,31 @@ export const FiltersForm = () => {
             ))}
         </div>
     ));
+
+    useEffect(() => {
+        const filterForm = document.querySelector("#filter-form form");
+        if (!filterForm) return;
+
+        const clearBtn = document.createElement("button");
+        clearBtn.type = "button";
+        clearBtn.id = "clear-filters";
+        clearBtn.className = "clear-filters-btn"; // Dodana klasa do stylizacji
+        clearBtn.textContent = t("clearFilters"); // Tekst dynamiczny zależny od języka
+        filterForm.appendChild(clearBtn);
+
+        clearBtn.addEventListener("click", () => {
+            const checkboxes = filterForm.querySelectorAll("input[type='checkbox']");
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    cb.click();
+                }
+            });
+        });
+
+        return () => {
+            clearBtn.remove();
+        };
+    }, [categoriesData, t]);
 
     return <form>{sections}</form>;
 };
